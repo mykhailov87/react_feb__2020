@@ -1,5 +1,5 @@
 // Core
-import React from 'react';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 // Styles
 import './Header.css';
@@ -22,4 +22,4 @@ Header.defaultProps = {
   children: 'My custom header',
 };
 
-export default Header;
+export default memo(Header);

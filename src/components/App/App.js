@@ -5,6 +5,7 @@ import * as PropTypes from 'prop-types';
 import Footer from '../Footer';
 import Header from '../Header/Header';
 import MyCustomComponent from '../MyCustomComponent/MyCustomComponent';
+import MyComponent from '../MyComponent/MyComponent';
 // Images
 import logo from '../../logo.svg';
 // Styles
@@ -46,7 +47,6 @@ function Input(props) {
   // TODO: read that https://ru.reactjs.org/docs/events.html
   const handleInputChange = useCallback((ev) => {
     const value = ev.target.value;
-    console.log(value);
     setInputValue(value);
   }, []);
 
@@ -54,15 +54,33 @@ function Input(props) {
   const inputRef = useRef(null); // { current: null }
 
   // TODO: read that https://ru.reactjs.org/docs/hooks-effect.html
-  React.useEffect(() => {
+  useEffect(() => {
     setInputValue('');
   }, [data]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (inputRef.current) {
       inputRef.current.focus();
     }
   }, []);
+
+  const timeoutId = useRef(0);
+
+  useEffect(() => {
+    if (inputValue) {
+      console.log('timeoutId.current ', timeoutId.current);
+      if (timeoutId.current) {
+        // clearTimeout(timeoutId.current);
+      }
+      timeoutId.current = setTimeout(() => {
+        // TODO: send request
+        console.log('%cSEND_REQUEST ', 'color:red', timeoutId.current);
+      }, 500);
+      return () => {
+        clearTimeout(timeoutId.current);
+      };
+    }
+  }, [inputValue]);
 
   if (inputRef.current) {
     console.dir(inputRef.current.value);
@@ -85,6 +103,7 @@ function Input(props) {
         data={data}
         item={{ id: data.length.toString(), title: inputValue }}
       />
+      <MyComponent />
     </React.Fragment>
   );
 }
