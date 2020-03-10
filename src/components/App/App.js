@@ -10,6 +10,7 @@ import MyComponent from '../MyComponent/MyComponent';
 import logo from '../../logo.svg';
 // Styles
 import './App.css';
+import MyClassComponent from '../MyClassComponent/MyClassComponent';
 
 // TODO: read that https://ru.reactjs.org/docs/components-and-props.html
 // TODO: read that https://ru.reactjs.org/docs/typechecking-with-proptypes.html
@@ -104,6 +105,9 @@ function Input(props) {
         item={{ id: data.length.toString(), title: inputValue }}
       />
       <MyComponent />
+      <MyClassComponent>
+        <TodoList />
+      </MyClassComponent>
     </React.Fragment>
   );
 }
@@ -113,6 +117,8 @@ function TodoList() {
     { id: '0', title: 'Learn React' },
     { id: '1', title: 'Learn Redux' },
   ]);
+
+  // return {}; // <-- Do not do that!!!
 
   // const data1 = useMemo(() => {}, []);
 
