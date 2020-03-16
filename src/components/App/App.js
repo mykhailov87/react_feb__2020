@@ -1,6 +1,18 @@
 // Core
-import React, { useEffect, useState, useCallback, useRef } from 'react';
+import React, { useEffect, useState, useCallback, useRef, lazy, Suspense } from 'react';
 import * as PropTypes from 'prop-types';
+
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  NavLink,
+  Redirect,
+  useParams,
+  withRouter,
+} from 'react-router-dom';
+
 // Components
 import Footer from '../Footer';
 import Header from '../Header/Header';
@@ -8,6 +20,8 @@ import MyCustomComponent from '../MyCustomComponent/MyCustomComponent';
 import MyComponent from '../MyComponent/MyComponent';
 // Images
 import logo from '../../logo.svg';
+// Routes
+import { routes } from '../../engine/config/routes';
 // Styles
 import './App.css';
 import MyClassComponent from '../MyClassComponent/MyClassComponent';
@@ -172,19 +186,177 @@ function Main() {
   );
 }
 
-function App() {
-  // TODO: add state
+// function App() {
+//   // TODO: add state
+//
+//   useEffect(() => {
+//     // TODO: add get data function here!
+//   }, []); // Component did mount
+//
+//   return (
+//     <>
+//       <Header />
+//       <Main />
+//       <Footer />
+//     </>
+//   );
+// }
 
-  useEffect(() => {
-    // TODO: add get data function here!
-  }, []); // Component did mount
-
+function Home() {
   return (
     <>
-      <Header />
-      <Main />
-      <Footer />
+      <h2>Home</h2>
+      <div>
+        My first router component
+      </div>
     </>
+  );
+}
+
+function About(props) {
+  console.log(props);
+  return <h2>About</h2>;
+}
+
+function Users() {
+  if (true) {
+    return <Redirect to="error404" />;
+  }
+  return <h2>Users</h2>;
+}
+
+function BlogPost() {
+  let { productId } = useParams();
+
+  useEffect(() => {
+    // fetch('products/' + productId)
+  }, [productId]);
+
+  return <div>Now showing post {productId}</div>;
+}
+
+
+// function Topics() {
+//   let match = useRouteMatch();
+//
+//   return (
+//     <div>
+//       <h2>Topics</h2>
+//
+//       <ul>
+//         <li>
+//           <Link to={`${match.url}/components`}>Components</Link>
+//         </li>
+//         <li>
+//           <Link to={`${match.url}/props-v-state`}>
+//             Props v. State
+//           </Link>
+//         </li>
+//       </ul>
+//
+//       {/* The Topics page has its own <Switch> with more routes
+//           that build on the /topics URL path. You can think of the
+//           2nd <Route> here as an "index" page for all topics, or
+//           the page that is shown when no topic is selected */}
+//       <Switch>
+//         <Route path={`${match.path}/:topicId`}>
+//           <Topic />
+//         </Route>
+//         <Route path={match.path}>
+//           <h3>Please select a topic.</h3>
+//         </Route>
+//       </Switch>
+//     </div>
+//   );
+// }
+
+function Navigation() {
+  return (
+    <nav>
+      <ul>
+        <li>
+          <Link to={routes.home}>Home</Link>
+        </li>
+        <li>
+          <Link to={routes.about}>About</Link>
+        </li>
+        <li>
+          <Link to={routes.users}>Users</Link>
+        </li>
+        <li>
+          <NavLink
+            exact
+            to="/products/ololo"
+            activeClassName="selected"
+            activeStyle={{
+              fontWeight: "bold",
+              color: "red"
+            }}
+          >Ololo</NavLink>
+        </li>
+      </ul>
+    </nav>
+  );
+}
+
+// const config = Object.freeze({
+//   items: [
+//     { path: routes.home, component: Home },
+//   ],
+// });
+
+const home = lazy(() => import('../MyComponent/MyComponent'));
+
+function App() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <Router>
+        <div>
+          <Navigation />
+
+          {/* A <Switch> looks through its children <Route>s and
+            renders the first one that matches the current URL. */}
+          <Switch>
+            {/*{config.items.map((item) => {*/}
+            {/*  if (item.redirect) {*/}
+            {/*    return <Redirect to={item.path} />*/}
+            {/*  }*/}
+            {/*  return (*/}
+            {/*    <Route*/}
+            {/*      key={item.path}*/}
+            {/*      path={item.path}*/}
+            {/*      component={item.component}*/}
+            {/*    />*/}
+            {/*  )*/}
+            {/*})}*/}
+            <Route
+              exact
+              path={routes.home} // "/"
+              component={Home}
+            />
+            <Route
+              strict
+              path={routes.about}
+            >
+              <About />
+            </Route>
+            <Route path={routes.users}>
+              <Users />
+            </Route>
+            <Route path="/products/:productId"> {/* "/products/ololo" */}
+              <BlogPost />
+            </Route>
+            <Route path="/error404">
+              <div>404 page</div>
+            </Route>
+            <Route path="/error500">
+              <div>Something went wrong :(</div>
+            </Route>
+            <Redirect to="/error404" />
+          </Switch>
+        </div>
+      </Router>
+    </Suspense>
   );
 }
 
