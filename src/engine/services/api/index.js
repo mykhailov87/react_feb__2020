@@ -3,7 +3,7 @@ import axios from 'axios';
 
 class Api {
   constructor() {
-    this.http = axios.create({ baseURL: '' }); // TODO: add your server baseURL
+    this.http = axios.create({ baseURL: 'http://localhost:3000' }); // TODO: add your server baseURL
   }
 
   static getInstance() {
@@ -16,6 +16,10 @@ class Api {
   exampleGetRequest() {
     // TODO: remove that. this an example of your own api method.
     return this.http.get('/my-path');
+  }
+
+  getTodoListData() {
+    return this.http.get('/posts')
   }
 
   // TODO: add your own api methods here

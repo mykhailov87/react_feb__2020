@@ -1,6 +1,7 @@
 // Core
 import React, { useEffect, useState, useCallback, useRef, lazy, Suspense } from 'react';
 import * as PropTypes from 'prop-types';
+import { Provider, useDispatch, useSelector } from 'react-redux'
 
 import {
   BrowserRouter as Router,
@@ -18,10 +19,13 @@ import Footer from '../Footer';
 import Header from '../Header/Header';
 import MyCustomComponent from '../MyCustomComponent/MyCustomComponent';
 import MyComponent from '../MyComponent/MyComponent';
+import TodoListComponent from '../TodoList/TodoList';
 // Images
 import logo from '../../logo.svg';
 // Routes
 import { routes } from '../../engine/config/routes';
+// Store
+import { store } from '../../engine/init/store'
 // Styles
 import './App.css';
 import MyClassComponent from '../MyClassComponent/MyClassComponent';
@@ -203,11 +207,13 @@ function Main() {
 // }
 
 function Home() {
+  const list = useSelector(state => state.todos.list);
   return (
     <>
       <h2>Home</h2>
       <div>
         My first router component
+        {list.map((_, index) => <p key={index}>{index}</p>)}
       </div>
     </>
   );
@@ -308,55 +314,65 @@ function Navigation() {
 const home = lazy(() => import('../MyComponent/MyComponent'));
 
 function App() {
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <Router>
-        <div>
-          <Navigation />
+  // const dispatch = useDispatch();
+  const dispatch = store.dispatch;
 
-          {/* A <Switch> looks through its children <Route>s and
+  useEffect(() => {
+    // dispatch({ type: 'OLOLO_OLOLO_OLOLO', payload: 'Hello Roman' });
+  }, [dispatch]);
+
+  return (
+    <Provider store={store}>
+      <Suspense fallback={<div>Loading...</div>}>
+        <Router>
+          <div>
+            <Navigation />
+
+            {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
-          <Switch>
-            {/*{config.items.map((item) => {*/}
-            {/*  if (item.redirect) {*/}
-            {/*    return <Redirect to={item.path} />*/}
-            {/*  }*/}
-            {/*  return (*/}
-            {/*    <Route*/}
-            {/*      key={item.path}*/}
-            {/*      path={item.path}*/}
-            {/*      component={item.component}*/}
-            {/*    />*/}
-            {/*  )*/}
-            {/*})}*/}
-            <Route
-              exact
-              path={routes.home} // "/"
-              component={Home}
-            />
-            <Route
-              strict
-              path={routes.about}
-            >
-              <About />
-            </Route>
-            <Route path={routes.users}>
-              <Users />
-            </Route>
-            <Route path="/products/:productId"> {/* "/products/ololo" */}
-              <BlogPost />
-            </Route>
-            <Route path="/error404">
-              <div>404 page</div>
-            </Route>
-            <Route path="/error500">
-              <div>Something went wrong :(</div>
-            </Route>
-            <Redirect to="/error404" />
-          </Switch>
-        </div>
-      </Router>
-    </Suspense>
+            <Switch>
+              {/*{config.items.map((item) => {*/}
+              {/*  if (item.redirect) {*/}
+              {/*    return <Redirect to={item.path} />*/}
+              {/*  }*/}
+              {/*  return (*/}
+              {/*    <Route*/}
+              {/*      key={item.path}*/}
+              {/*      path={item.path}*/}
+              {/*      component={item.component}*/}
+              {/*    />*/}
+              {/*  )*/}
+              {/*})}*/}
+              <Route
+                exact
+                path={routes.home} // "/"
+                component={Home}
+              />
+              <Route
+                strict
+                path={routes.about}
+              >
+                <About />
+              </Route>
+              <Route path={routes.users}>
+                <Users />
+              </Route>
+              <Route path="/products/:productId"> {/* "/products/ololo" */}
+                <BlogPost />
+              </Route>
+              <Route path="/error404">
+                <div>404 page</div>
+              </Route>
+              <Route path="/error500">
+                <div>Something went wrong :(</div>
+              </Route>
+              <Route path="/todo" component={TodoListComponent} />
+              <Redirect to="/error404" />
+            </Switch>
+          </div>
+        </Router>
+      </Suspense>
+    </Provider>
   );
 }
 
