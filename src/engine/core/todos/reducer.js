@@ -2,7 +2,8 @@
 import { SET_TODO_LIST_DATA } from './types'
 
 const initialState = {
-  list: []
+  list: [],
+  isLoading: true,
 };
 
 export function todosReducer (state = initialState, action) {
@@ -19,6 +20,12 @@ export function todosReducer (state = initialState, action) {
         ...state,
         list: [{}, {}, {}]
       };
+    }
+    case 'SET_TODO_LIST_DATA_LOADING': {
+      return {
+        ...state,
+        isLoading: payload
+      }
     }
     default: {
       return state;
