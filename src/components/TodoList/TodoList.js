@@ -1,5 +1,5 @@
 // Modules
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { connect, useSelector, useDispatch } from 'react-redux'
 import PropTypes from 'prop-types'
 // Component
@@ -8,8 +8,9 @@ import Input from '../Input'
 import Api from '../../engine/services/api'
 // Actions
 import { getTodoListData } from '../../engine/core/todos/actions'
+import { asyncActions } from '../../engine/core/todos/saga/asyncActions'
 // Selectors
-import { filteredListSelector, isLoadingSelector } from '../../engine/core/todos/selectors'
+import { filteredListSelector, isLoadingSelector, isDoneSelector } from '../../engine/core/todos/selectors'
 
 class TodoList extends React.Component {
   componentDidMount() {
@@ -22,13 +23,13 @@ class TodoList extends React.Component {
   };
 
   render() {
-    const { list, isLoading } = this.props;
+    const { list, isLoading, doneTodos } = this.props;
     return (
       <>
         <Input />
         {isLoading
           ? <div>Loading...</div>
-          : list.map((item) => <div key={item.id}>{item.title}</div>)
+          : doneTodos.map((item) => <div key={item.id}>{item.title}</div>)
         }
       </>
     );
@@ -37,6 +38,7 @@ class TodoList extends React.Component {
 
 const mapStateToProps = (state) => ({
   list: filteredListSelector(state),
+  doneTodos: isDoneSelector(state),
   isLoading: isLoadingSelector(state),
 });
 
@@ -50,23 +52,23 @@ TodoList.propTypes = {
   getTodoListDataAsync: PropTypes.func,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(TodoList);
+// export default connect(mapStateToProps, mapDispatchToProps)(TodoList);
 
 
 function useTodoListData() {
   const dispatch = useDispatch();
   const list = useSelector(filteredListSelector);
-  const isLoading = useSelector(filteredListSelector);
+  const isLoading = useSelector(isLoadingSelector);
 
   const getRequest = useCallback(() => {
-    dispatch(getTodoListData())
+    dispatch(asyncActions.getTodoListDataAsync())
   }, [dispatch]);
 
-  return {
+  return useMemo(() => ({
     data: list,
     getRequest,
     isLoading,
-  }
+  }), [list, getRequest, isLoading]);
 }
 
 function Component() {
@@ -86,4 +88,6 @@ function Component() {
   )
 }
 
-export const WrappedComponent = connect(mapStateToProps, mapDispatchToProps)(Component);
+// export const WrappedComponent = connect(mapStateToProps, mapDispatchToProps)(Component);
+
+export default Component

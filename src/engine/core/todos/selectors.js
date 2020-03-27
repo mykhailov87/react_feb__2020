@@ -25,3 +25,10 @@ export const filteredListSelector = createSelector(
     return list.filter(item => item.title.toLowerCase().includes(inputValue))
   }
 );
+
+export const isDoneSelector = createSelector(
+  listSelector,
+  (list) => {
+    return list.filter(todoItem => todoItem.isDone)
+  }
+);

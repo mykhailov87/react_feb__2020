@@ -2,10 +2,10 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 
 // Instruments
-import { dev, middleware } from '../middlewares';
+import { dev, middleware, sagaMiddleWare } from '../middlewares';
 import { rootReducer } from '../rootReducer';
 
-// import { rootSaga } from './rootSaga';
+import { rootSaga } from '../rootSaga';
 
 const devtools = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__; // eslint-disable-line
 const composeEnhancers = dev && devtools ? devtools : compose;
@@ -15,6 +15,6 @@ const store = createStore(
   composeEnhancers(applyMiddleware(...middleware)),
 );
 
-// sagaMiddleWare.run(rootSaga);
+sagaMiddleWare.run(rootSaga);
 
 export { store };

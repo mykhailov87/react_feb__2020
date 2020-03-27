@@ -4,6 +4,8 @@ import axios from 'axios';
 class Api {
   constructor() {
     this.http = axios.create({ baseURL: 'http://localhost:3000' }); // TODO: add your server baseURL
+
+    this.getTodoListData = this.getTodoListData.bind(this)
   }
 
   static getInstance() {
