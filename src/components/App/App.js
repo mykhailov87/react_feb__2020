@@ -20,6 +20,7 @@ import Header from '../Header/Header';
 import MyCustomComponent from '../MyCustomComponent/MyCustomComponent';
 import MyComponent from '../MyComponent/MyComponent';
 import TodoListComponent from '../TodoList/TodoList';
+import Form from '../Form/Form';
 // Images
 import logo from '../../logo.svg';
 // Routes
@@ -290,6 +291,9 @@ function Navigation() {
           <Link to={routes.users}>Users</Link>
         </li>
         <li>
+          <Link to="/form">Form</Link>
+        </li>
+        <li>
           <NavLink
             exact
             to="/products/ololo"
@@ -367,6 +371,7 @@ function App() {
                 <div>Something went wrong :(</div>
               </Route>
               <Route path="/todo" component={TodoListComponent} />
+              <Route path="/form" component={Form} />
               <Redirect to="/error404" />
             </Switch>
           </div>
