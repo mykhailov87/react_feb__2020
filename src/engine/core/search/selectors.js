@@ -1,1 +1,1 @@
-export const inputValueSelector = state => state.search.input;
+export const inputValueSelector = state => state.getIn(['search', 'input'], '');

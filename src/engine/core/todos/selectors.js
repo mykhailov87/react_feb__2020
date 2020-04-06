@@ -1,18 +1,19 @@
 // Modules
+import { List } from 'immutable'
 import { createSelector } from 'reselect';
 // Selectors
 import { inputValueSelector } from '../search/selectors'
 
-const todosSelector = state => state.todos;
+const todosSelector = state => state.getIn(['todos'], List());
 
 export const isLoadingSelector = createSelector(
   todosSelector,
-  todos => todos.isLoading
+  todos => todos.get('isLoading')
 );
 
 export const listSelector = createSelector(
   todosSelector,
-  todos => todos.list,
+  todos => todos.getIn(['list'], List()),
 );
 
 export const filteredListSelector = createSelector(

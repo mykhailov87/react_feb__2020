@@ -1,6 +1,6 @@
 // Core
-import { combineReducers } from 'redux';
-import { reducer as formReducer } from 'redux-form'
+import { combineReducers } from 'redux-immutablejs';
+import { reducer as formReducer } from 'redux-form/immutable'
 
 // Reducer
 import { todosReducer } from '../../core/todos/reducer';

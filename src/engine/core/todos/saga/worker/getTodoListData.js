@@ -8,7 +8,7 @@ export function* callGetTodoListDataWorker() {
   yield put(setTodoListDataLoading(true));
 
   try {
-    const list = yield select(state => state.todos.list);
+    const list = yield select(state => state.get(['todos', 'list']));
 
     const response = yield apply(Api, Api.getTodoListData, []);
     // const response = yield call([Api, Api.getTodoListData]);

@@ -2,6 +2,7 @@
 import React, { useEffect, useState, useCallback, useRef, lazy, Suspense } from 'react';
 import * as PropTypes from 'prop-types';
 import { Provider, useDispatch, useSelector } from 'react-redux'
+import { List } from 'immutable';
 
 import {
   BrowserRouter as Router,
@@ -208,7 +209,7 @@ function Main() {
 // }
 
 function Home() {
-  const list = useSelector(state => state.todos.list);
+  const list = useSelector(state => state.getIn(['todos', 'list'], List()));
   return (
     <>
       <h2>Home</h2>

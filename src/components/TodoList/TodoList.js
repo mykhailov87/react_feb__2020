@@ -2,6 +2,7 @@
 import React, { useCallback, useEffect, useMemo } from 'react';
 import { connect, useSelector, useDispatch } from 'react-redux'
 import PropTypes from 'prop-types'
+import { isImmutable } from 'immutable'
 // Component
 import Input from '../Input'
 // Engine
@@ -74,15 +75,23 @@ function useTodoListData() {
 function Component() {
   const { data, getRequest, isLoading } = useTodoListData();
 
+  const data_js = useMemo(() => {
+    return isImmutable(data)
+      ? data.toJS()
+      : data;
+  }, [data]);
+
   useEffect(() => {
     getRequest()
   }, []);
+
+  console.log('%c Rendering...', 'background-color: black; color: yellow');
 
   return (
     <>
       {isLoading
         ? <div>Loading...</div>
-        : data.map((item) => <div key={item.id}>{item.title}</div>)
+        : data.map((item) => <div key={item.get('id')}>{item.get('title')}</div>)
       }
     </>
   )
