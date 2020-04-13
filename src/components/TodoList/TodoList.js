@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useMemo } from 'react';
 import { connect, useSelector, useDispatch } from 'react-redux'
 import PropTypes from 'prop-types'
 import { isImmutable } from 'immutable'
+import { useTranslation, withTranslation } from 'react-i18next'
 // Component
 import Input from '../Input'
 // Engine
@@ -74,6 +75,7 @@ function useTodoListData() {
 
 function Component() {
   const { data, getRequest, isLoading } = useTodoListData();
+  const { t, i18n } = useTranslation();
 
   const data_js = useMemo(() => {
     return isImmutable(data)
@@ -87,8 +89,48 @@ function Component() {
 
   console.log('%c Rendering...', 'background-color: black; color: yellow');
 
+  const lang = i18n.language;
+
+  const changeLanguage = useCallback((ev) => {
+    const current = ev.target.value;
+    i18n.changeLanguage(current)
+  }, []);
+
   return (
     <>
+      <div>
+        <label>
+          <input
+            checked={lang === 'ua'}
+            name="lang"
+            onChange={changeLanguage}
+            type="radio"
+            value="ua"
+          />
+          ua
+        </label>
+        <label>
+          <input
+            checked={lang === 'en'}
+            name="lang"
+            onChange={changeLanguage}
+            type="radio"
+            value="en"
+          />
+          en
+        </label>
+        <label>
+          <input
+            checked={lang === 'ru'}
+            name="lang"
+            onChange={changeLanguage}
+            type="radio"
+            value="ru"
+          />
+          ru
+        </label>
+      </div>
+      <h2>{t('My first todo app')}</h2>
       {isLoading
         ? <div>Loading...</div>
         : data.map((item) => <div key={item.get('id')}>{item.get('title')}</div>)
@@ -99,4 +141,4 @@ function Component() {
 
 // export const WrappedComponent = connect(mapStateToProps, mapDispatchToProps)(Component);
 
-export default Component
+export default withTranslation()(Component)

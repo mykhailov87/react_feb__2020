@@ -3,6 +3,7 @@ import React, { useEffect, useState, useCallback, useRef, lazy, Suspense } from 
 import * as PropTypes from 'prop-types';
 import { Provider, useDispatch, useSelector } from 'react-redux'
 import { List } from 'immutable';
+import { useTranslation } from 'react-i18next'
 
 import {
   BrowserRouter as Router,
@@ -210,9 +211,10 @@ function Main() {
 
 function Home() {
   const list = useSelector(state => state.getIn(['todos', 'list'], List()));
+  const { t } = useTranslation();
   return (
     <>
-      <h2>Home</h2>
+      <h2>{t('Home')}</h2>
       <div>
         My first router component
         {list.map((_, index) => <p key={index}>{index}</p>)}
@@ -327,6 +329,7 @@ function App() {
   }, [dispatch]);
 
   return (
+
     <Provider store={store}>
       <Suspense fallback={<div>Loading...</div>}>
         <Router>
